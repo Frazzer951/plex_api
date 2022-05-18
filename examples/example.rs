@@ -9,10 +9,17 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     let plex_token = env::var("PLEX_TOKEN")?;
     let plex_ip = env::var("PLEX_IP")?;
 
-    let plex = PlexAPI::new(plex_ip, Some(plex_token));
+    let plex = PlexAPI::new(plex_ip, plex_token);
 
-    let json_obj = plex.libraries()?;
+    let libraries = plex.libraries()?;
 
-    println!("{:#?}", json_obj.media_container.directory);
+    for library in libraries.directory {
+        println!("{}: {}", library.title, library.uuid);
+    }
+
+    let info = plex.info()?;
+
+    println!("{:#?}", info);
+
     Ok(())
 }
