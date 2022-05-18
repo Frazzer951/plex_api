@@ -1,9 +1,9 @@
 ---
 "on":
   push:
-    branches: [ main ]
+    branches: [main]
   pull_request:
-    branches: [ main ]
+    branches: [main]
 
 name: Test
 jobs:
@@ -44,8 +44,35 @@ jobs:
         with:
           command: check
 
-  lints:
-    name: Lints
+  #  lints:
+  #    name: Lints
+  #    runs-on: ubuntu-latest
+  #    steps:
+  #      - name: Checkout sources
+  #        uses: actions/checkout@v3
+  #      - name: Install stable toolchain
+  #        uses: actions-rs/toolchain@v1
+  #        with:
+  #          profile: minimal
+  #          toolchain: stable
+  #          override: true
+  #          components: "rustfmt, clippy"
+  #      - uses: Swatinem/rust-cache@v1.4.0
+  #        with:
+  #          sharedKey: cache
+  #      - name: Run cargo fmt
+  #        uses: actions-rs/cargo@v1
+  #        with:
+  #          command: fmt
+  #          args: "--all -- --check"
+  #      - name: Clippy with warnings
+  #        uses: actions-rs/cargo@v1
+  #        with:
+  #          command: clippy
+  #          args: "--all-targets --all-features -- -D warnings"
+
+  lints_nightly:
+    name: Lints (nightly)
     runs-on: ubuntu-latest
     steps:
       - name: Checkout sources
@@ -54,12 +81,9 @@ jobs:
         uses: actions-rs/toolchain@v1
         with:
           profile: minimal
-          toolchain: stable
+          toolchain: nightly
           override: true
           components: "rustfmt, clippy"
-      - uses: Swatinem/rust-cache@v1.4.0
-        with:
-          sharedKey: cache
       - name: Run cargo fmt
         uses: actions-rs/cargo@v1
         with:
@@ -70,27 +94,3 @@ jobs:
         with:
           command: clippy
           args: "--all-targets --all-features -- -D warnings"
-
-#  lints_nightly:
-#    name: Lints (nightly)
-#    runs-on: ubuntu-latest
-#    steps:
-#      - name: Checkout sources
-#        uses: actions/checkout@v3
-#      - name: Install stable toolchain
-#        uses: actions-rs/toolchain@v1
-#        with:
-#          profile: minimal
-#          toolchain: nightly
-#          override: true
-#          components: "rustfmt, clippy"
-#      - name: Run cargo fmt
-#        uses: actions-rs/cargo@v1
-#        with:
-#          command: fmt
-#          args: "--all -- --check"
-#      - name: Clippy with warnings
-#        uses: actions-rs/cargo@v1
-#        with:
-#          command: clippy
-#          args: "--all-targets --all-features -- -D warnings"
